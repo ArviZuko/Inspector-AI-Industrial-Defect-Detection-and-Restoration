@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+*.pth
+/SRC/Application/app.exe
+/SRC/Installer/installer.exe
+/Dataset/Restoration/*
+!/Dataset/Restoration/README.md
+/Dataset/Super Resolution/*
+!/Dataset/Super Resolution/README.md
