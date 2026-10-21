@@ -6,7 +6,15 @@ __pycache__/
 *.pth
 /SRC/Application/app.exe
 /SRC/Installer/installer.exe
-/Dataset/Restoration/*
+/Dataset/Restoration/**
 !/Dataset/Restoration/README.md
-/Dataset/Super Resolution/*
+/Dataset/Super Resolution/**
 !/Dataset/Super Resolution/README.md
+
+# Preserve download instructions throughout the original dataset tree
+!/Dataset/Restoration/**/
+!/Dataset/Restoration/**/DOWNLOADS.md
+!/Dataset/Restoration/DOWNLOADS.md
+!/Dataset/Super Resolution/**/
+!/Dataset/Super Resolution/**/DOWNLOADS.md
+!/Dataset/Super Resolution/DOWNLOADS.md

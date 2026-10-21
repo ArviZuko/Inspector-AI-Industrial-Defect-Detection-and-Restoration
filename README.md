@@ -1,7 +1,7 @@
-# Inspectra AI
+# Inspector AI - Industrial Defect Detection and Restoration
 ## GitHub downloads and repository layout
 
-This repository preserves the supplied project layout. Large assets are published in [GitHub Releases](https://github.com/ArviZuko/Inspectra-AI/releases/tag/project-assets-v1); see [DOWNLOADS.md](DOWNLOADS.md) for the complete list and restoration instructions. The installer and portable application are provided there, as are all trained checkpoints and the restoration/super-resolution datasets. Download notes also appear in their original folders.
+This repository preserves the supplied project layout. Large assets are published in [GitHub Releases](https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/tag/project-assets-v1); see [DOWNLOADS.md](DOWNLOADS.md) for the complete list and restoration instructions. The installer and portable application are provided there, as are all trained checkpoints and the restoration/super-resolution datasets. Download notes also appear in their original folders.
 
 ```text
 Dataset/                       Defect data in Git; large dataset download notes
