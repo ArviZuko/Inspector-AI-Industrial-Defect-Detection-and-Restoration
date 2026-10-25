@@ -1,11 +1,15 @@
 # Inspector AI - Industrial Defect Detection and Restoration
+## Project video
+
+[Watch or download the Inspector AI demo video](Documentation/Inspector%20AI.mp4).
+
 ## GitHub downloads and repository layout
 
 This repository preserves the supplied project layout. Large assets are published in [GitHub Releases](https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/tag/project-assets-v1); see [DOWNLOADS.md](DOWNLOADS.md) for the complete list and restoration instructions. The installer and portable application are provided there, as are all trained checkpoints and the restoration/super-resolution datasets. Download notes also appear in their original folders.
 
 ```text
 Dataset/                       Defect data in Git; large dataset download notes
-Documentation/                 Project report and presentation
+Documentation/                 Project report, presentation, and demo video
 Screenshot/                    Application screenshots
 SRC/
   Application/                 Portable executable download instructions
