@@ -1,0 +1,122 @@
+name: Restore project files with Git LFS
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/restore-project-lfs.yml]
+permissions:
+  contents: write
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Free hosted runner space
+        run: |
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
+          df -h .
+      - uses: actions/checkout@v4
+      - name: Restore and verify original files with Git LFS
+        shell: python
+        run: |
+          import hashlib, json, os, pathlib, shutil, subprocess, tempfile, zipfile
+          root = pathlib.Path.cwd()
+          manifest = json.loads("[{\"name\":\"Inspectra-AI-app.exe\",\"size\":1244869940,\"digest\":\"sha256:73c84167226ef37eef87bffe6ae1c7c0a763d38f6cbf873af391cc4f459de3ee\",\"url\":\"https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/project-assets-v1/Inspectra-AI-app.exe\",\"count\":1},{\"name\":\"Inspectra-AI-installer.exe\",\"size\":1247711693,\"digest\":\"sha256:26f46b74c606ab0d1ad5e2c7b6f85528fcb7a2a0cf611d3f6609ba98d5b9d9d1\",\"url\":\"https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/project-assets-v1/Inspectra-AI-installer.exe\",\"count\":1},{\"name\":\"model-weights-01.zip\",\"size\":1389784168,\"digest\":\"sha256:864e220644c7e8ab1b18fd986df54db681a8b24c221deabc9947511c6fc0da97\",\"url\":\"https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/project-assets-v1/model-weights-01.zip\",\"count\":31},{\"name\":\"model-weights-02.zip\",\"size\":638524042,\"digest\":\"sha256:c9344977cf38ac7bf42805076e031eac096cdf0fb83e8b020717f353fd0c54d3\",\"url\":\"https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/project-assets-v1/model-weights-02.zip\",\"count\":13},{\"name\":\"restoration-dataset-01.zip\",\"size\":1471681168,\"digest\":\"sha256:3c32f60cacec412109723b8a37439c5403b856f74c6850a71576e85cd11bc58c\",\"url\":\"https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/project-assets-v1/restoration-dataset-01.zip\",\"count\":2532},{\"name\":\"restoration-dataset-02.zip\",\"size\":1476032264,\"digest\":\"sha256:c3158469e0a835efb35d5e5f5f385229cb43ea24f06b77e6b10bf471b116a74d\",\"url\":\"https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/project-assets-v1/restoration-dataset-02.zip\",\"count\":2504},{\"name\":\"restoration-dataset-03.zip\",\"size\":1476145533,\"digest\":\"sha256:243fb775e93def617159881c8c947c170ed411444b808b13f0383e7db3d84634\",\"url\":\"https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/project-assets-v1/restoration-dataset-03.zip\",\"count\":2633},{\"name\":\"restoration-dataset-04.zip\",\"size\":360227304,\"digest\":\"sha256:bf2f5e84ec40ce6a255e53aa0c7aab21347f0e3a89073bdecb169f95b8832a3c\",\"url\":\"https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/project-assets-v1/restoration-dataset-04.zip\",\"count\":649},{\"name\":\"super-resolution-dataset-01.zip\",\"size\":1473006224,\"digest\":\"sha256:e42c544d44db0c4e40e1a70e5cba244dffb6f1cfe13a5c890f9bc076b3dc0a1f\",\"url\":\"https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/project-assets-v1/super-resolution-dataset-01.zip\",\"count\":2849},{\"name\":\"super-resolution-dataset-02.zip\",\"size\":1476740713,\"digest\":\"sha256:2f505d9af8f1a0cb942f0db36135595e17fa87ea934b6772e5c394938ed56ec9\",\"url\":\"https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/project-assets-v1/super-resolution-dataset-02.zip\",\"count\":4974},{\"name\":\"super-resolution-dataset-03.zip\",\"size\":72207461,\"digest\":\"sha256:74dfec493b7041b59a03a5513112e9900fed069dd709662759f3987a584e79f0\",\"url\":\"https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/project-assets-v1/super-resolution-dataset-03.zip\",\"count\":495}]")
+          added = []
+          def run(*args):
+              subprocess.run(args, check=True)
+          def digest(path):
+              with open(path, "rb") as stream:
+                  return hashlib.file_digest(stream, "sha256").hexdigest()
+          for asset in manifest:
+              print("Downloading", asset["name"], flush=True)
+              target = pathlib.Path(os.environ["RUNNER_TEMP"]) / asset["name"]
+              run("curl", "--fail", "--location", "--retry", "3", "--silent", "--show-error", "-o", str(target), asset["url"])
+              assert target.stat().st_size == asset["size"], asset["name"]
+              assert "sha256:" + digest(target) == asset["digest"], asset["name"]
+              if asset["name"].endswith(".zip"):
+                  with zipfile.ZipFile(target) as archive:
+                      members = [m for m in archive.infolist() if not m.is_dir()]
+                      assert len(members) == asset["count"], (asset["name"], len(members))
+                      for member in members:
+                          relative = pathlib.PurePosixPath(member.filename)
+                          assert not relative.is_absolute() and ".." not in relative.parts
+                          assert relative.parts[0] in ("Dataset", "SRC"), member.filename
+                          destination = root.joinpath(*relative.parts)
+                          assert not destination.exists(), "Unexpected existing path: " + member.filename
+                          destination.parent.mkdir(parents=True, exist_ok=True)
+                          with archive.open(member) as source, open(destination, "wb") as output:
+                              shutil.copyfileobj(source, output)
+                          added.append(relative.as_posix())
+              else:
+                  destination = "SRC/Application/app.exe" if asset["name"] == "Inspectra-AI-app.exe" else "SRC/Installer/installer.exe"
+                  root.joinpath(destination).parent.mkdir(parents=True, exist_ok=True)
+                  assert not root.joinpath(destination).exists()
+                  shutil.copyfile(target, root / destination)
+                  added.append(destination)
+              target.unlink()
+          assert len(added) == len(set(added)) == 16682, len(added)
+          run("git", "lfs", "install", "--local")
+          run("git", "lfs", "track", "Dataset/Restoration/**", "Dataset/Super Resolution/**")
+          for relative in added:
+              if not relative.startswith("Dataset/"):
+                  run("git", "lfs", "track", relative)
+              assert (root / relative).stat().st_size < 2_000_000_000, relative
+          for path in list(root.rglob("DOWNLOADS.md")):
+              if ".git" not in path.parts:
+                  run("git", "rm", "--", str(path.relative_to(root)))
+          for relative in ["Dataset/Restoration/README.md", "Dataset/Super Resolution/README.md", "SRC/Application/README.md"]:
+              run("git", "rm", "--", relative)
+          readme = root / "README.md"
+          text = readme.read_text()
+          start = text.index("## GitHub downloads and repository layout")
+          end = text.index("The sections below retain", start)
+          replacement = """## Git LFS assets and repository layout
+          
+          The supplied application, installer, trained checkpoints, and restoration/super-resolution datasets are stored directly in their original folders using Git LFS.
+          
+          ```text
+          Dataset/                       Defect, restoration, and super-resolution data
+          Documentation/                 Project report, presentation, and demo video
+          Screenshot/                    Application screenshots
+          SRC/
+            Application/app.exe          Portable Windows application (Git LFS)
+            Installer/installer.exe      Windows installer (Git LFS)
+            Models/                      Research notebooks, plots, metrics, and checkpoints
+            Source Code/
+              app.py                     Consolidated desktop application
+              Models/                    Runtime checkpoints (Git LFS)
+          requirements.txt               Supplied pinned runtime dependencies
+          ```
+          
+          Install Git LFS, then clone the repository with its large files:
+          
+          ```powershell
+          git lfs install
+          git clone https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration.git
+          cd Inspector-AI-Industrial-Defect-Detection-and-Restoration
+          git lfs pull
+          ```
+          
+          For the source application, run from the repository root:
+          
+          ```powershell
+          py -3.10 -m venv .venv
+          .\\.venv\\Scripts\\python.exe -m pip install -r requirements.txt
+          .\\.venv\\Scripts\\python.exe 'SRC\\Source Code\\app.py'
+          ```
+          
+          """
+          readme.write_text(text[:start] + replacement + text[end:])
+          run("git", "add", "--", ".gitattributes", "README.md", "Dataset/Restoration", "Dataset/Super Resolution", "SRC/Application", "SRC/Installer", "SRC/Models", "SRC/Source Code/Models")
+          for relative in added:
+              pointer = subprocess.check_output(["git", "show", ":" + relative]).decode()
+              expected = "version https://git-lfs.github.com/spec/v1\n" + "oid sha256:" + digest(root / relative) + "\nsize " + str((root / relative).stat().st_size) + "\n"
+              assert pointer == expected, relative
+          run("git", "rm", ".github/workflows/restore-project-lfs.yml")
+          run("git", "config", "user.name", "github-actions[bot]")
+          run("git", "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
+          run("git", "commit", "-m", "Store supplied application, models, and datasets in their folders with Git LFS")
+          run("git", "push", "origin", "HEAD:main")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
+              summary.write("Restored and verified 16,682 files with Git LFS: 16,636 dataset files, 44 model files, and 2 executables. Removed download placeholders and the temporary workflow.\n")
+          
