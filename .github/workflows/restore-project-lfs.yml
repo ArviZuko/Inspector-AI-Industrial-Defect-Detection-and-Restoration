@@ -113,7 +113,10 @@ jobs:
           
           """
           readme.write_text(text[:start] + replacement + text[end:])
-          run("git", "add", "--", ".gitattributes", "README.md", "Dataset/Restoration", "Dataset/Super Resolution", "SRC/Application", "SRC/Installer", "SRC/Models", "SRC/Source Code/Models")
+          ignore = root / ".gitignore"
+          ignore_lines = ignore.read_text().splitlines()
+          ignore.write_text("\n".join(line for line in ignore_lines if line != "*.pth" and not any(fragment in line for fragment in ["/SRC/Application/app.exe", "/SRC/Installer/installer.exe", "/Dataset/Restoration/", "/Dataset/Super Resolution/", "# Preserve download instructions"])) + "\n")
+          run("git", "add", "-f", "--", ".gitattributes", ".gitignore", "README.md", "Dataset/Restoration", "Dataset/Super Resolution", "SRC/Application", "SRC/Installer", "SRC/Models", "SRC/Source Code/Models")
           print("Verifying all 16682 staged LFS pointers", flush=True)
           for relative in added:
               pointer = subprocess.check_output(["git", "show", ":" + relative]).decode()
