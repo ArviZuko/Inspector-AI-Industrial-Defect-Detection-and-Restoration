@@ -3,25 +3,34 @@
 
 [Watch or download the Inspector AI demo video](Documentation/Inspector%20AI.mp4).
 
-## GitHub downloads and repository layout
+## Git LFS assets and repository layout
 
-This repository preserves the supplied project layout. Large assets are published in [GitHub Releases](https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/tag/project-assets-v1); see [DOWNLOADS.md](DOWNLOADS.md) for the complete list and restoration instructions. The installer and portable application are provided there, as are all trained checkpoints and the restoration/super-resolution datasets. Download notes also appear in their original folders.
+The supplied application, installer, trained checkpoints, and restoration/super-resolution datasets are stored directly in their original folders using Git LFS.
 
 ```text
-Dataset/                       Defect data in Git; large dataset download notes
+Dataset/                       Defect, restoration, and super-resolution data
 Documentation/                 Project report, presentation, and demo video
 Screenshot/                    Application screenshots
 SRC/
-  Application/                 Portable executable download instructions
-  Installer/                   Installer download instructions
-  Models/                      Research notebooks, plots, metrics, weight links
+  Application/app.exe          Portable Windows application (Git LFS)
+  Installer/installer.exe      Windows installer (Git LFS)
+  Models/                      Research notebooks, plots, metrics, and checkpoints
   Source Code/
     app.py                     Consolidated desktop application
-    Models/                    Runtime checkpoint download instructions
+    Models/                    Runtime checkpoints (Git LFS)
 requirements.txt               Supplied pinned runtime dependencies
 ```
 
-For this layout, download and extract the model archives into the repository root, then run from the repository root:
+Install Git LFS, then clone the repository with its large files:
+
+```powershell
+git lfs install
+git clone https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration.git
+cd Inspector-AI-Industrial-Defect-Detection-and-Restoration
+git lfs pull
+```
+
+For the source application, run from the repository root:
 
 ```powershell
 py -3.10 -m venv .venv
