@@ -1,0 +1,82 @@
+{
+  "files": [
+    {
+      "path": "SRC/Application/app.exe",
+      "size": 1244869940,
+      "sha256": "73c84167226ef37eef87bffe6ae1c7c0a763d38f6cbf873af391cc4f459de3ee",
+      "parts": [
+        {
+          "url": "https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/project-assets-v1/Inspectra-AI-app.exe",
+          "size": 1244869940,
+          "sha256": "73c84167226ef37eef87bffe6ae1c7c0a763d38f6cbf873af391cc4f459de3ee",
+          "name": "Inspectra-AI-app.exe"
+        }
+      ]
+    },
+    {
+      "path": "SRC/Installer/installer.exe",
+      "size": 1247711693,
+      "sha256": "26f46b74c606ab0d1ad5e2c7b6f85528fcb7a2a0cf611d3f6609ba98d5b9d9d1",
+      "parts": [
+        {
+          "url": "https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/project-assets-v1/Inspectra-AI-installer.exe",
+          "size": 1247711693,
+          "sha256": "26f46b74c606ab0d1ad5e2c7b6f85528fcb7a2a0cf611d3f6609ba98d5b9d9d1",
+          "name": "Inspectra-AI-installer.exe"
+        }
+      ]
+    },
+    {
+      "path": "SRC/Models/Restoration_Models/NAFNet/NAFNet_weights.pth",
+      "size": 116832865,
+      "sha256": "06686230a58355f77b4defa4eb47f1224b7a2f6b75b1857aca5bb73b8128f1a9",
+      "parts": [
+        {
+          "url": "https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/large-files-no-lfs/NAFNet_weights.pth",
+          "size": 116832865,
+          "sha256": "06686230a58355f77b4defa4eb47f1224b7a2f6b75b1857aca5bb73b8128f1a9",
+          "name": "NAFNet_weights.pth"
+        }
+      ]
+    },
+    {
+      "path": "SRC/Source Code/Models/restoration/NAFNet_weights.pth",
+      "size": 116832865,
+      "sha256": "06686230a58355f77b4defa4eb47f1224b7a2f6b75b1857aca5bb73b8128f1a9",
+      "parts": [
+        {
+          "url": "https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/large-files-no-lfs/NAFNet_weights.pth",
+          "size": 116832865,
+          "sha256": "06686230a58355f77b4defa4eb47f1224b7a2f6b75b1857aca5bb73b8128f1a9",
+          "name": "NAFNet_weights.pth"
+        }
+      ]
+    },
+    {
+      "path": "SRC/Models/Super_Resolution_Models/ESRGAN/ESRGAN_weights.pth",
+      "size": 128899159,
+      "sha256": "6bfd72b1e31aad7f7dd38f65edfbed110a2f4355bd1bc927d79fc4e25735f736",
+      "parts": [
+        {
+          "url": "https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/large-files-no-lfs/ESRGAN_weights.pth",
+          "size": 128899159,
+          "sha256": "6bfd72b1e31aad7f7dd38f65edfbed110a2f4355bd1bc927d79fc4e25735f736",
+          "name": "ESRGAN_weights.pth"
+        }
+      ]
+    },
+    {
+      "path": "SRC/Source Code/Models/super_resolution/ESRGAN_weights.pth",
+      "size": 128899159,
+      "sha256": "6bfd72b1e31aad7f7dd38f65edfbed110a2f4355bd1bc927d79fc4e25735f736",
+      "parts": [
+        {
+          "url": "https://github.com/ArviZuko/Inspector-AI-Industrial-Defect-Detection-and-Restoration/releases/download/large-files-no-lfs/ESRGAN_weights.pth",
+          "size": 128899159,
+          "sha256": "6bfd72b1e31aad7f7dd38f65edfbed110a2f4355bd1bc927d79fc4e25735f736",
+          "name": "ESRGAN_weights.pth"
+        }
+      ]
+    }
+  ]
+}

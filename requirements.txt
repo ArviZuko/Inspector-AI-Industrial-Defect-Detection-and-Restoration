@@ -1,0 +1,18 @@
+# Inspectra AI runtime dependencies
+# Tested with CPython 3.10.20, Windows x64.
+# Install: python -m pip install -r requirements.txt
+# Other package dependencies are installed automatically by pip.
+
+PyQt6==6.11.0
+numpy==2.2.6
+opencv-python==4.13.0.92
+Pillow==12.2.0
+torch==2.11.0
+torchvision==0.26.0
+segmentation-models-pytorch==0.5.0
+transformers==4.57.6
+timm==1.0.30
+scipy==1.15.3
+scikit-image==0.25.2
+reportlab==4.5.1
+pypdf==6.21.1
